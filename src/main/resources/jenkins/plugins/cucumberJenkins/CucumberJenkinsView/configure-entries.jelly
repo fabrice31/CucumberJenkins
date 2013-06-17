@@ -1,0 +1,42 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+	xmlns:i="jelly:fmt">
+
+	<f:entry title="${%Project Name}" field="projectName">
+		<f:textbox id="cucumberJenkins.projectName" name="projectName"/>
+	</f:entry>
+
+	<f:entry title="${%Total Display}" field="totalDisplay">
+		<f:textbox id="cucumberJenkins.totalDisplay" name="totalDisplay"/>
+	</f:entry>
+	<f:entry title="${%System Regexp}" field="systemRegexp">
+		<f:textbox id="cucumberJenkins.systemRegexp" name="systemRegexp"/>
+	</f:entry>
+
+	<f:entry title="${%First Display}" field="firstDisplay">
+		<f:textbox id="cucumberJenkins.firstDisplay" name="firstDisplay"/>
+	</f:entry>
+	<f:entry title="${%First Regexp}" field="firstRegexp">
+		<f:textbox id="cucumberJenkins.firstRegexp" name="firstRegexp"/>
+	</f:entry>
+
+	<f:entry title="${%Second Display}" field="secondDisplay">
+		<f:textbox id="cucumberJenkins.secondDisplay" name="secondDisplay"/>
+	</f:entry>
+	<f:entry title="${%Second Regexp}" field="secondRegexp">
+		<f:textbox id="cucumberJenkins.secondRegexp" name="secondRegexp"/>
+	</f:entry>
+
+	<f:entry title="${%Third Display}" field="thirdDisplay">
+		<f:textbox id="cucumberJenkins.thirdDisplay" name="thirdDisplay"/>
+	</f:entry>
+	<f:entry title="${%Third Regexp}" field="thirdRegexp">
+		<f:textbox id="cucumberJenkins.thirdRegexp" name="thirdRegexp"/>
+	</f:entry>
+
+	<f:entry title="${%Refresh time in seconds}" field="refresh">
+		<f:textbox id="cucumberJenkins.refresh" name="refresh"/>
+	</f:entry>
+
+</j:jelly>
+
