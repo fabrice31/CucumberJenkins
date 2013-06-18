@@ -6,6 +6,13 @@
 		<f:textbox id="cucumberJenkins.projectName" name="projectName"/>
 	</f:entry>
 
+	<f:entry title="${%Type of restults}" field="testType">
+		<select name="goalType">
+			<option value="cucumber">Cucumber</option>
+			<option value="phpunit">PhpUnit</option>
+		</select>
+	</f:entry>
+
 	<f:entry title="${%Total Display}" field="totalDisplay">
 		<f:textbox id="cucumberJenkins.totalDisplay" name="totalDisplay"/>
 	</f:entry>

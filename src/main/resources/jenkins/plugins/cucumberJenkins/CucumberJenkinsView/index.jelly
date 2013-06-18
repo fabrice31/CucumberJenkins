@@ -1,163 +1,166 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
          xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
          xmlns:i="jelly:fmt">
+<html>
+	<head>
+		<style>
+			/* reset */
+			html,body,body div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}
+			article,aside,figure,footer,header,hgroup,nav,section{display:block}
+			img,object,embed{max-width:100%}
+			html{overflow-y:scroll}
+			ul{list-style:none}
+			blockquote,q{quotes:none}
+			blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
+			a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent}
+			del{text-decoration:line-through}
+			abbr[title],dfn[title]{border-bottom:1px dotted #000;cursor:help}
+			table{border-collapse:collapse;border-spacing:0}
+			th{font-weight:bold;vertical-align:bottom}
+			td{font-weight:normal;vertical-align:top}
+			hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}
+			input,select{vertical-align:middle}
+			pre{white-space:pre;white-space:pre-wrap;white-space:pre-line;word-wrap:break-word}
+			input[type="radio"]{vertical-align:text-bottom}
+			input[type="checkbox"]{vertical-align:bottom;*vertical-align:baseline}
+			.ie6 input{vertical-align:text-bottom}
+			select,input,textarea{font:99% sans-serif}
+			table{font-size:inherit;font:100%}
+			a:hover,a:active{outline:none}
+			small{font-size:85%}
+			strong,th{font-weight:bold}
+			td,td img{vertical-align:top}
+			sub,sup{font-size:75%;line-height:0;position:relative}
+			sup{top:-0.5em}
+			sub{bottom:-0.25em}
+			pre,code,kbd,samp{font-family:monospace, sans-serif}
+			.clickable,label,input[type=button],input[type=submit],button{cursor:pointer}
+			button,input,select,textarea{margin:0}
+			button{width:auto;overflow:visible}
+			.ie7 img{-ms-interpolation-mode:bicubic}
+			.ie6 html{filter:expression(document.execCommand("BackgroundImageCache", false, true))}
+			.clearfix:before,.clearfix:after{content:"\0020";display:block;height:0;overflow:hidden}
+			.clearfix:after{clear:both}
+			.clearfix{zoom:1}
+			body{font:13px Helmet, Freesans, sans-serif}
+			body,select,input,textarea{color:#333}
+			a{color:#03f}
+			a:hover{color:#69f}
+			::-moz-selection{background:#fcd700;color:#fff;text-shadow:none}
+			::selection{background:#fcd700;color:#fff;text-shadow:none}
+			a:link{-webkit-tap-highlight-color:#fcd700}
+			ins{background-color:#fcd700;color:#000;text-decoration:none}
+			mark{background-color:#fcd700;color:#000;font-style:italic;font-weight:bold}
+			html{overflow:hidden}
 
-    
-    <style>
-		/* reset */
-		html,body,body div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}
-		article,aside,figure,footer,header,hgroup,nav,section{display:block}
-		img,object,embed{max-width:100%}
-		html{overflow-y:scroll}
-		ul{list-style:none}
-		blockquote,q{quotes:none}
-		blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
-		a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent}
-		del{text-decoration:line-through}
-		abbr[title],dfn[title]{border-bottom:1px dotted #000;cursor:help}
-		table{border-collapse:collapse;border-spacing:0}
-		th{font-weight:bold;vertical-align:bottom}
-		td{font-weight:normal;vertical-align:top}
-		hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}
-		input,select{vertical-align:middle}
-		pre{white-space:pre;white-space:pre-wrap;white-space:pre-line;word-wrap:break-word}
-		input[type="radio"]{vertical-align:text-bottom}
-		input[type="checkbox"]{vertical-align:bottom;*vertical-align:baseline}
-		.ie6 input{vertical-align:text-bottom}
-		select,input,textarea{font:99% sans-serif}
-		table{font-size:inherit;font:100%}
-		a:hover,a:active{outline:none}
-		small{font-size:85%}
-		strong,th{font-weight:bold}
-		td,td img{vertical-align:top}
-		sub,sup{font-size:75%;line-height:0;position:relative}
-		sup{top:-0.5em}
-		sub{bottom:-0.25em}
-		pre,code,kbd,samp{font-family:monospace, sans-serif}
-		.clickable,label,input[type=button],input[type=submit],button{cursor:pointer}
-		button,input,select,textarea{margin:0}
-		button{width:auto;overflow:visible}
-		.ie7 img{-ms-interpolation-mode:bicubic}
-		.ie6 html{filter:expression(document.execCommand("BackgroundImageCache", false, true))}
-		.clearfix:before,.clearfix:after{content:"\0020";display:block;height:0;overflow:hidden}
-		.clearfix:after{clear:both}
-		.clearfix{zoom:1}
-		body{font:13px Helmet, Freesans, sans-serif}
-		body,select,input,textarea{color:#333}
-		a{color:#03f}
-		a:hover{color:#69f}
-		::-moz-selection{background:#fcd700;color:#fff;text-shadow:none}
-		::selection{background:#fcd700;color:#fff;text-shadow:none}
-		a:link{-webkit-tap-highlight-color:#fcd700}
-		ins{background-color:#fcd700;color:#000;text-decoration:none}
-		mark{background-color:#fcd700;color:#000;font-style:italic;font-weight:bold}
-		html{overflow:hidden}
+			/* css */
+			body{background-color:#000;color:white;font-family:'Arial', 'Helvetica', sans-serif;font-size:1.5em;}
+			#header{margin:auto;width:90%; margin-bottom: 20px; text-align: center; font-size: 2em;}
+			#current-cycle{overflow:hidden;margin:auto;margin-bottom:20px;width:90%}
+			#footer{border-top:1px solid #0f0f0f;color:#cccccc;padding-top:8px;font-size:1.2em;font-style:italic;text-align:right;margin:auto;width:90%}
+			div.job-container{width:25%;float:left;position:relative}
+			.job-name{color:white;font-size:2em;font-weight:bold;text-align:center;display:block;margin:auto;}
+			.job-status{border-radius:30%;background-color:#888;width:250px;height:100px;margin:auto;margin-top:0.5em;margin-bottom:0.5em;color:#fff}
+			.pb-container {font-size: 1.3em; padding-top: 15px; max-height: 50%;}
+			.error {display: block; width: 90%; background: darkred; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
+			.valid {display: block; width: 90%; background: green; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
+			.running {background: grey; color: white;}
+			.time-value{font-size:1.8em;text-align:center;display:block;padding-top:7px; line-height: 1.8em;}
+			.time-value strong{font-size:1.5em;text-align:center;margin-top:12px}
+			progress {
+				width: 90%;
+				height: 1.5em;
+				margin-top: 30px;
+				background: green;
+				color: white;
+			}
+			progress::-webkit-progress-bar {
+				background: green;
+			}
+			progress::-webkit-progress-value {
+				background: darkred;
+			}
+			progress::-moz-progress-bar {
+				background: darkred;
+			}
+			progress:not([value])::-webkit-progress-bar {
+			  background: grey;
+			}
+			.stat {
+				text-align: center;
+				font-size: 1.5em;
+			}
 
-		/* css */
-		body{background-color:#000;color:white;font-family:'Arial', 'Helvetica', sans-serif;font-size:1.5em;}
-		#header{margin:auto;width:90%; margin-bottom: 20px; text-align: center; font-size: 2em;}
-		#current-cycle{overflow:hidden;margin:auto;margin-bottom:20px;width:90%}
-		#footer{border-top:1px solid #0f0f0f;color:#cccccc;padding-top:8px;font-size:1.2em;font-style:italic;text-align:right;margin:auto;width:90%}
-		div.job-container{width:25%;float:left;position:relative}
-		.job-name{color:white;font-size:2em;font-weight:bold;text-align:center;display:block;margin:auto;}
-		.job-status{border-radius:30%;background-color:#888;width:250px;height:100px;margin:auto;margin-top:0.5em;margin-bottom:0.5em;color:#fff}
-		.pb-container {font-size: 1.3em; padding-top: 15px; max-height: 50%;}
-		.error {display: block; width: 90%; background: darkred; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
-		.valid {display: block; width: 90%; background: green; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
-		.running {background: grey; color: white;}
-		.time-value{font-size:1.8em;text-align:center;display:block;padding-top:7px; line-height: 1.8em;}
-		.time-value strong{font-size:1.5em;text-align:center;margin-top:12px}
-		progress {
-			width: 90%;
-			height: 1.5em;
-			margin-top: 30px; 
-			background: green; 
-			color: white;
-		}
-		progress::-webkit-progress-bar {
-			background: green;
-		}
-		progress::-webkit-progress-value {
-			background: darkred;
-		}
-		progress::-moz-progress-bar {
-			background: darkred;
-		}
-		progress:not([value])::-webkit-progress-bar {
-		  background: grey;
-		}
-		.stat {
-			text-align: center;
-			font-size: 1.5em;
-		}
-		
-		.debug {visibility: hidden;}
-   </style>
+			.debug {visibility: hidden;}
+	   </style>
 
-   <meta http-equiv="refresh" content="${it.refresh}" />   
- 
-    <div id="header">
-        <div id="team-name">${it.projectName}</div>
-    </div>
+	   <meta http-equiv="refresh" content="${it.refresh}" />
+	   <title>CucumberJenkins : ${it.totalDisplay} > ${it.firstDisplay} > ${it.secondDisplay} > ${it.thirdDisplay}</title>
+	</head>
+	<body>
+		<div id="header">
+			<div id="team-name">${it.projectName}</div>
+		</div>
 
-    <div id="current-cycle">
-        <div class="job-container total">
-            <h2 class="job-name">${it.totalDisplay}</h2>
-            <div class="job-status ${it.totalStatus}">
-                <p class="time-value">${it.totalTime}</p>
-            </div>
-			<progress value="${it.totalNbJobsFailed}" max="${it.totalNbJobs}" />
-			<p class="stat">${it.totalNbJobsFailed} / ${it.totalNbJobs}</p>
-			<div class="pb-container">
-				${it.systemJobs}
+		<div id="current-cycle">
+			<div class="job-container total">
+				<h2 class="job-name">${it.totalDisplay}</h2>
+				<div class="job-status ${it.totalStatus}">
+					<p class="time-value">${it.totalTime}</p>
+				</div>
+				<progress value="${it.totalNbJobsFailed}" max="${it.totalNbJobs}" />
+				<p class="stat">${it.totalNbJobsFailed} / ${it.totalNbJobs}</p>
+				<div class="pb-container">
+					${it.systemJobs}
+				</div>
 			</div>
-        </div>
 
-        <div class="job-container firstjobs">
-            <h2 class="job-name">${it.firstDisplay}</h2>
-            <div class="job-status ${it.firstStatus}">
-                <p class="time-value">${it.firstTime}</p>
-            </div>
-			<progress value="${it.firstNbJobsFailed}" max="${it.firstNbJobs}" />
-			<p class="stat">${it.firstNbJobsFailed} / ${it.firstNbJobs}</p>
-			<div class="pb-container">
-				${it.firstJobsFailed}
+			<div class="job-container firstjobs">
+				<h2 class="job-name">${it.firstDisplay}</h2>
+				<div class="job-status ${it.firstStatus}">
+					<p class="time-value">${it.firstTime}</p>
+				</div>
+				<progress value="${it.firstNbJobsFailed}" max="${it.firstNbJobs}" />
+				<p class="stat">${it.firstNbJobsFailed} / ${it.firstNbJobs}</p>
+				<div class="pb-container">
+					${it.firstJobsFailed}
+				</div>
 			</div>
-        </div>
 
-        <div class="job-container secondjobs">
-            <h2 class="job-name">${it.secondDisplay}</h2>
-            <div class="job-status ${it.secondStatus}">
-                <p class="time-value">${it.secondTime}</p>
-            </div>
-			<progress value="${it.secondNbJobsFailed}" max="${it.secondNbJobs}" />
-			<p class="stat">${it.secondNbJobsFailed} / ${it.secondNbJobs}</p>
-			<div class="pb-container">
-				${it.secondJobsFailed}
+			<div class="job-container secondjobs">
+				<h2 class="job-name">${it.secondDisplay}</h2>
+				<div class="job-status ${it.secondStatus}">
+					<p class="time-value">${it.secondTime}</p>
+				</div>
+				<progress value="${it.secondNbJobsFailed}" max="${it.secondNbJobs}" />
+				<p class="stat">${it.secondNbJobsFailed} / ${it.secondNbJobs}</p>
+				<div class="pb-container">
+					${it.secondJobsFailed}
+				</div>
 			</div>
-        </div>
 
-        <div class="job-container thirdsjobs">
-            <h2 class="job-name">${it.thirdDisplay}</h2>
-            <div class="job-status ${it.thirdStatus}">
-                <p class="time-value">${it.thirdTime}</p>
-            </div>
-			<progress value="${it.thirdNbJobsFailed}" max="${it.thirdNbJobs}" />
-			<p class="stat">${it.thirdNbJobsFailed} / ${it.thirdNbJobs}</p>
-			<div class="pb-container">
-				${it.thirdJobsFailed}
+			<div class="job-container thirdsjobs">
+				<h2 class="job-name">${it.thirdDisplay}</h2>
+				<div class="job-status ${it.thirdStatus}">
+					<p class="time-value">${it.thirdTime}</p>
+				</div>
+				<progress value="${it.thirdNbJobsFailed}" max="${it.thirdNbJobs}" />
+				<p class="stat">${it.thirdNbJobsFailed} / ${it.thirdNbJobs}</p>
+				<div class="pb-container">
+					${it.thirdJobsFailed}
+				</div>
 			</div>
-        </div>
 
-    </div>
+		</div>
 
-    <div id="footer">
-		created by Fabrice31 - Overblog, 2013
-    </div>
-	
-	<div class="debug">
-		${it.debug}
-	</div>
+		<div id="footer">
+			created by Fabrice31 - Overblog, 2013
+		</div>
 
+		<div class="debug">
+			${it.debug}
+		</div>
+	</body>
+</html>
 </j:jelly>
 

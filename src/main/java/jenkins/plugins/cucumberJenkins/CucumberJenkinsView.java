@@ -58,9 +58,10 @@ public class CucumberJenkinsView extends ListView {
     public String getTotalRegexp(){ return totalRegexp; }
     public String getTotalDisplay() { return totalDisplay; }
     public String getSystemRegexp(){ return systemRegexp; }
-	
+    public String getTestType(){ return testType; }
+
 	public String getDebug() { return debug;}
-	
+
     private String projectName;
     private String refresh;
     private String firstRegexp;
@@ -72,6 +73,7 @@ public class CucumberJenkinsView extends ListView {
     private String totalRegexp;
 	private String totalDisplay;
 	private String systemRegexp;
+	private String testType;
 	private String debug;
 
 
@@ -92,8 +94,9 @@ public class CucumberJenkinsView extends ListView {
 		this.totalDisplay = (req.getParameter("totalDisplay") != null) ? req.getParameter("totalDisplay") : "Total";
 		this.totalRegexp = ".*";
 		this.systemRegexp = (req.getParameter("systemRegexp") != null) ? req.getParameter("systemRegexp") : "^_.*";
+		this.testType = (req.getParameter("testType") == "cucumber") ? "cucumber" : "phpunit";
 		this.debug = "";
-	  
+
 	}
 
     public String getTotalTime() {return getCurrentBuildDuration(totalRegexp); }
@@ -114,9 +117,9 @@ public class CucumberJenkinsView extends ListView {
     public String getFirstJobsFailed() { return getJobsFailed(firstRegexp); }
     public String getSecondJobsFailed() { return getJobsFailed(secondRegexp); }
     public String getThirdJobsFailed() { return getJobsFailed(thirdRegexp); }
-	
+
 	public String getSystemJobs() { return getAllJobs(systemRegexp); }
-	
+
     private String getCurrentBuildDuration(String pattern) {
 		int timeToSave = 0;
 		Hudson hudson = Hudson.getInstance();
@@ -153,7 +156,7 @@ public class CucumberJenkinsView extends ListView {
         }
         return String.valueOf(nbJob);
     }
-	
+
     private String getNbJobsFailed(String pattern) {
 		int nbJob = 0;
 		String logFile = "";
@@ -171,10 +174,9 @@ public class CucumberJenkinsView extends ListView {
 			}
         }
 
-		// debug pour tester le theme
         return String.valueOf(nbJob);
-    }	
-	
+    }
+
 	private Boolean jobIsFailed (Job job) {
 		return !(
 			job.getLastBuild().getBuildStatusSummary().message.toString().equalsIgnoreCase("stable")
@@ -204,7 +206,6 @@ public class CucumberJenkinsView extends ListView {
 			}
         }
 
-		// debug pour tester le theme
         return failedJobs;
     }
 
@@ -212,7 +213,7 @@ public class CucumberJenkinsView extends ListView {
 		String allJobs = "";
 		Hudson hudson = Hudson.getInstance();
         List<Job> jobs = hudson.getAllItems(Job.class);
-		
+
 		for(Job job:jobs){
 			if (job.getName().toString().matches(pattern)) {
 				if (job.getLastBuild() != null) {
@@ -225,10 +226,9 @@ public class CucumberJenkinsView extends ListView {
 			}
         }
 
-		// debug pour tester le theme
         return allJobs;
-    }	
-	
+    }
+
     private String convertDurationToDisplay(long durationInMillis) {
         long durationInMins = durationInMillis / millisecondsInAMinute;
 		int hour = (int) durationInMins/60;
@@ -242,12 +242,25 @@ public class CucumberJenkinsView extends ListView {
         BigDecimal rounded = bd.setScale(precision, roundingMode);
         return rounded.doubleValue();
     }
-	
-	private static String getCucumberLogResult(String fileName, String which)
+
+	private String getCucumberLogResult(String fileName, String which)
 	{
+		if (this.testType == "cucumber") {
+			return getCucumberResult(fileName, which);
+		}
+		else
+		{
+			return getUnitResult(fileName, which);
+		}
+	}
+
+	private static String getCucumberResult (String fileName, String which)
+	{
+		// cucumber
+		// 18 scenarios (2 failed, 16 passed)
 		Pattern pattern = Pattern.compile("([0-9]+) scenarios? \\((.*)\\)");
 		Pattern failed = Pattern.compile("([0-9]+) failed.*");
-		Pattern passed = Pattern.compile(".*([0-9]+) passed");
+
 		try{
 			// Open the log file
 			FileInputStream fstream = new FileInputStream(fileName);
@@ -257,19 +270,12 @@ public class CucumberJenkinsView extends ListView {
 			String strLine;
 			//Read File Line By Line
 			while ((strLine = br.readLine()) != null)   {
-				// 18 scenarios (2 failed, 16 passed)
 				Matcher m = pattern.matcher(strLine);
 				if (m.find()) {
 					if (which == "failed") {
 						Matcher f = failed.matcher(m.group(2));
 						if (f.find()) {
 							return f.group(1);
-						}
-					}
-					else if (which == "passed") {
-						Matcher p = passed.matcher(m.group(2));
-						if (p.find()) {
-							return p.group(1);
 						}
 					}
 					else if (which == "all") {
@@ -282,8 +288,45 @@ public class CucumberJenkinsView extends ListView {
 		}catch (Exception e){//Catch exception if any
 			return "0";
 		}
-		
+
+		return "0";
+	}
+
+	private static String getUnitResult (String fileName, String which)
+	{
+		// Unitest
+		// [exec] Tests: 661, Assertions: 2524, Failures: 1, Skipped: 4.
+		Pattern pattern = Pattern.compile("Tests: ([0-9]+), Assertions: [0-9]+(.*)");
+		Pattern failed = Pattern.compile("Failures: ([0-9]+)");
+		try{
+			// Open the log file
+			FileInputStream fstream = new FileInputStream(fileName);
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			//Read File Line By Line
+			while ((strLine = br.readLine()) != null)   {
+				Matcher m = pattern.matcher(strLine);
+				if (m.find()) {
+					if (which == "failed") {
+						Matcher f = failed.matcher(m.group(2));
+						if (f.find()) {
+							return f.group(1);
+						}
+					}
+					else if (which == "all") {
+						return m.group(1);
+					}
+				}
+			}
+			//Close the input stream
+			in.close();
+		}catch (Exception e){//Catch exception if any
+			return "0";
+		}
+
 		// if the job are no cucumber results, we should relaunch
 		return "0";
-	}	
+	}
 }
