@@ -58,7 +58,6 @@ public class CucumberJenkinsView extends ListView {
     public String getTotalRegexp(){ return totalRegexp; }
     public String getTotalDisplay() { return totalDisplay; }
     public String getSystemRegexp(){ return systemRegexp; }
-    public String getTestType(){ return testType; }
 
 	public String getDebug() { return debug;}
 
@@ -73,7 +72,6 @@ public class CucumberJenkinsView extends ListView {
     private String totalRegexp;
 	private String totalDisplay;
 	private String systemRegexp;
-	private String testType;
 	private String debug;
 
 
@@ -94,8 +92,8 @@ public class CucumberJenkinsView extends ListView {
 		this.totalDisplay = (req.getParameter("totalDisplay") != null) ? req.getParameter("totalDisplay") : "Total";
 		this.totalRegexp = ".*";
 		this.systemRegexp = (req.getParameter("systemRegexp") != null) ? req.getParameter("systemRegexp") : "^_.*";
-		this.testType = (req.getParameter("testType") == "cucumber") ? "cucumber" : "phpunit";
 		this.debug = "";
+
 
 	}
 
@@ -245,59 +243,41 @@ public class CucumberJenkinsView extends ListView {
 
 	private String getCucumberLogResult(String fileName, String which)
 	{
-		if (this.testType == "cucumber") {
-			return getCucumberResult(fileName, which);
-		}
-		else
-		{
-			return getUnitResult(fileName, which);
-		}
-	}
+		Pattern pattern;
+		Pattern failed;
+		String result;
 
-	private static String getCucumberResult (String fileName, String which)
-	{
-		// cucumber
+		// regexp for cucumber result
 		// 18 scenarios (2 failed, 16 passed)
-		Pattern pattern = Pattern.compile("([0-9]+) scenarios? \\((.*)\\)");
-		Pattern failed = Pattern.compile("([0-9]+) failed.*");
-
-		try{
-			// Open the log file
-			FileInputStream fstream = new FileInputStream(fileName);
-			// Get the object of DataInputStream
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine;
-			//Read File Line By Line
-			while ((strLine = br.readLine()) != null)   {
-				Matcher m = pattern.matcher(strLine);
-				if (m.find()) {
-					if (which == "failed") {
-						Matcher f = failed.matcher(m.group(2));
-						if (f.find()) {
-							return f.group(1);
-						}
-					}
-					else if (which == "all") {
-						return m.group(1);
-					}
-				}
-			}
-			//Close the input stream
-			in.close();
-		}catch (Exception e){//Catch exception if any
-			return "0";
+		pattern = Pattern.compile("([0-9]+) scenarios? \\((.*)\\)");
+		failed = Pattern.compile("([0-9]+) failed.*");
+		result = parseLog(fileName, which, pattern, failed);
+		if (result != null) {
+			return result;
 		}
 
+		// regexp for Unitest result
+		// [exec] Tests: 661, Assertions: 2524, Failures: 1, Skipped: 4.
+		pattern = Pattern.compile("\\(([0-9]+) tests");
+		failed = Pattern.compile("Failures: ([0-9]+)");
+		result = parseLog(fileName, which, pattern, failed);
+		if (result != null) {
+			return result;
+		}
+
+		// other pattern for unitest result
+		// OK (43 tests, 87 assertions)
+		pattern = Pattern.compile("Tests: ([0-9]+), Assertions: [0-9]+(.*)");
+		result = parseLog(fileName, which, pattern, failed);
+		if (result != null) {
+			return result;
+		}
+
+		// no result found, send 0
 		return "0";
 	}
 
-	private static String getUnitResult (String fileName, String which)
-	{
-		// Unitest
-		// [exec] Tests: 661, Assertions: 2524, Failures: 1, Skipped: 4.
-		Pattern pattern = Pattern.compile("Tests: ([0-9]+), Assertions: [0-9]+(.*)");
-		Pattern failed = Pattern.compile("Failures: ([0-9]+)");
+	private static String parseLog (String fileName, String which, Pattern pattern, Pattern failed) {
 		try{
 			// Open the log file
 			FileInputStream fstream = new FileInputStream(fileName);
@@ -323,10 +303,9 @@ public class CucumberJenkinsView extends ListView {
 			//Close the input stream
 			in.close();
 		}catch (Exception e){//Catch exception if any
+			// no log file, return 0
 			return "0";
 		}
-
-		// if the job are no cucumber results, we should relaunch
-		return "0";
+		return null;
 	}
 }
