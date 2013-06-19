@@ -216,7 +216,7 @@ public class CucumberJenkinsView extends ListView {
 			if (job.getName().toString().matches(pattern)) {
 				if (job.getLastBuild() != null) {
 					allJobs += "<span class=\""
-								+ ((jobIsFailed(job))? "error" : "valid")
+								+ ((jobIsFailed(job))? "error " : "valid ")
 								+ ((job.getLastBuild().isBuilding())? "running" : "")
 								+ "\">"+job.getName().toString()
 								+ "</span>";
