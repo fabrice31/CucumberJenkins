@@ -91,6 +91,27 @@
 				font-size: 2.5em;
 			}
 
+			progress.show_run {
+				width: 90%;
+				height: 0.2em;
+				background: white;
+				margin-top: 0;
+				margin-left: 10px;
+			}
+			progress.show_run::-webkit-progress-bar {
+				background: white;
+			}
+			progress.show_run::-webkit-progress-value {
+				background: blue;
+			}
+			progress.show_run::-moz-progress-bar {
+				background: blue;
+			}
+			progress.show_run:not([value])::-webkit-progress-bar {
+			  background: grey;
+			}
+
+
 			.debug {visibility: hidden;}
 	   </style>
 
