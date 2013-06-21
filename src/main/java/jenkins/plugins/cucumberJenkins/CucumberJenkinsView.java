@@ -205,12 +205,13 @@ public class CucumberJenkinsView extends ListView {
 								+ job.getLastBuild().getEstimatedDuration()
 								+ "\" />";
 						}
-						failedJobs += "<span class=\"error "
+						failedJobs += "<span><span class=\"error "
 									+ runningMode
 									+ "\">"+job.getName().toString()
 									+ " (" + nbScenarioFailed + " / "+ nbScenario + ")"
 									+ "</span>"
-									+ runningProgress;
+									+ runningProgress
+									+ "</span>";
 					}
 				}
 			}
