@@ -228,10 +228,23 @@ public class CucumberJenkinsView extends ListView {
 		for(Job job:jobs){
 			if (job.getName().toString().matches(pattern)) {
 				if (job.getLastBuild() != null) {
-					allJobs += "<span class=\""
+					String runningMode = " ";
+					String runningProgress = "";
+					if (job.getLastBuild().isBuilding()) {
+						int currentDuration = (int)(System.currentTimeMillis() - job.getLastBuild().getTimeInMillis());
+						runningMode = "running";
+						runningProgress = "<progress class=\"show_run\" value=\""
+							+ currentDuration
+							+ "\" max=\""
+							+ job.getLastBuild().getEstimatedDuration()
+							+ "\" />";
+					}
+					allJobs += "<span><span class=\""
 								+ ((jobIsFailed(job))? "error " : "valid ")
 								+ ((job.getLastBuild().isBuilding())? "running" : "")
 								+ "\">"+job.getName().toString()
+								+ "</span>"
+								+ runningProgress
 								+ "</span>";
 				}
 			}
