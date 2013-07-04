@@ -196,6 +196,7 @@ public class CucumberJenkinsView extends ListView {
 						int nbScenarioFailed = Integer.parseInt(getCucumberLogResult(logFile, "failed"));
 						String runningMode = " ";
 						String runningProgress = "";
+						String lastAlert = "";
 						if (job.getLastBuild().isBuilding()) {
 							int currentDuration = (int)(System.currentTimeMillis() - job.getLastBuild().getTimeInMillis());
 							runningMode = "running";
@@ -204,9 +205,12 @@ public class CucumberJenkinsView extends ListView {
 								+ "\" max=\""
 								+ job.getLastBuild().getEstimatedDuration()
 								+ "\" />";
+						}else if (nbScenario == 0 || nbScenario < nbScenarioFailed) {
+							lastAlert = "bigerror";
 						}
 						failedJobs += "<span><span class=\"error "
 									+ runningMode
+									+ lastAlert
 									+ "\">"+job.getName().toString()
 									+ " (" + nbScenarioFailed + " / "+ nbScenario + ")"
 									+ "</span>"

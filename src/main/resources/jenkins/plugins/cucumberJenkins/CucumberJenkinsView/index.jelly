@@ -64,7 +64,8 @@
 			.pb-container {font-size: 1.7em; padding-top: 15px; max-height: 50%;}
 			.error {display: block; width: 90%; background: darkred; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
 			.valid {display: block; width: 90%; background: green; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
-			.running {background: grey; color: white;}
+			.bigerror {display: block; width: 90%; background: grey; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
+			.running {background: darkblue; color: white;}
 			.time-value{font-size:1.8em;text-align:center;display:block;padding-top:7px; line-height: 1.8em;}
 			.time-value strong{font-size:1.5em;text-align:center;margin-top:12px}
 			progress {
