@@ -88,10 +88,11 @@ public class CucumberJenkinsView extends ListView {
 		this.secondDisplay = (req.getParameter("secondDisplay") != null) ? req.getParameter("secondDisplay") : "Chrome";
 		this.thirdRegexp = (req.getParameter("thirdRegexp") != null) ? req.getParameter("thirdRegexp") : "^IE-.*";
 		this.thirdDisplay = (req.getParameter("thirdDisplay") != null) ? req.getParameter("thirdDisplay") : "Internet Explorer";
+		this.systemRegexp = (req.getParameter("systemRegexp") != null) ? req.getParameter("systemRegexp") : "^_.*";
 
 		this.totalDisplay = (req.getParameter("totalDisplay") != null) ? req.getParameter("totalDisplay") : "Total";
-		this.totalRegexp = ".*";
-		this.systemRegexp = (req.getParameter("systemRegexp") != null) ? req.getParameter("systemRegexp") : "^_.*";
+		this.totalRegexp = "("+this.firstRegexp+"|"+this.secondRegexp+"|"+this.thirdRegexp+"|"+this.systemRegexp+")";
+
 		this.debug = "";
 
 
@@ -115,7 +116,6 @@ public class CucumberJenkinsView extends ListView {
     public String getFirstJobsFailed() { return getJobsFailed(firstRegexp); }
     public String getSecondJobsFailed() { return getJobsFailed(secondRegexp); }
     public String getThirdJobsFailed() { return getJobsFailed(thirdRegexp); }
-
 	public String getSystemJobs() { return getAllJobs(systemRegexp); }
 
     private String getCurrentBuildDuration(String pattern) {
