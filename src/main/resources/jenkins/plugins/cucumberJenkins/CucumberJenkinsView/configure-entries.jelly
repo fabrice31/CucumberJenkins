@@ -14,10 +14,11 @@
 	</f:entry>
 
 	<f:entry title="${%Show all jobs}" field="showAll">
-		<f:textbox id="cucumberJenkins.showAll" name="showAll"/>
-		(type "all" for all tests)
+		<select name="showAll">
+			<option value="failed">Failed jobs only</option>
+			<option value="all">All jobs</option>
+    </select>
 	</f:entry>
-
 
 	<f:entry title="${%First Display}" field="firstDisplay">
 		<f:textbox id="cucumberJenkins.firstDisplay" name="firstDisplay"/>
