@@ -13,6 +13,12 @@
 		<f:textbox id="cucumberJenkins.systemRegexp" name="systemRegexp"/>
 	</f:entry>
 
+	<f:entry title="${%Show all jobs}" field="showAll">
+		<f:textbox id="cucumberJenkins.showAll" name="showAll"/>
+		(type "all" for all tests)
+	</f:entry>
+
+
 	<f:entry title="${%First Display}" field="firstDisplay">
 		<f:textbox id="cucumberJenkins.firstDisplay" name="firstDisplay"/>
 	</f:entry>

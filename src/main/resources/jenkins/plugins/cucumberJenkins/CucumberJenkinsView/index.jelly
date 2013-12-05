@@ -55,22 +55,22 @@
 
 			/* css */
 			body{background-color:#000;color:white;font-family:'Arial', 'Helvetica', sans-serif;font-size:1.5em;}
-			#header{margin:auto;width:90%; margin-bottom: 20px; text-align: center; font-size: 4em;}
+			#header{margin:auto;width:90%; margin-bottom: 20px; text-align: center; font-size: 3em;}
 			#current-cycle{overflow:hidden;margin:auto;margin-bottom:20px;width:90%}
-			#footer{border-top:1px solid #0f0f0f;color:#cccccc;padding-top:8px;font-size:1.2em;font-style:italic;text-align:right;margin:auto;width:90%}
+			#footer{border-top:1px solid #0f0f0f;color:#cccccc;padding-top:8px;font-size:1em;font-style:italic;text-align:right;margin:auto;width:90%}
 			div.job-container{width:25%;float:left;position:relative}
-			.job-name{color:white;font-size:3em;font-weight:bold;text-align:center;display:block;margin:auto;}
+			.job-name{color:white;font-size:2em;font-weight:bold;text-align:center;display:block;margin:auto;}
 			.job-status{border-radius:30%;background-color:#888;width:250px;height:100px;margin:auto;margin-top:0.5em;margin-bottom:0.5em;color:#fff}
-			.pb-container {font-size: 1.7em; padding-top: 15px; max-height: 50%;}
+			.pb-container {font-size: 1.5em; padding-top: 15px; max-height: 50%;}
 			.error {display: block; width: 90%; background: darkred; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
 			.valid {display: block; width: 90%; background: green; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
 			.bigerror {display: block; width: 90%; background: grey; color: white; border-radius: 10px; text-align: center; margin: 5px; padding: 5px;}
 			.running {background: darkblue; color: white;}
-			.time-value{font-size:1.8em;text-align:center;display:block;padding-top:7px; line-height: 1.8em;}
-			.time-value strong{font-size:1.5em;text-align:center;margin-top:12px}
+			.time-value{font-size:1.6em;text-align:center;display:block;padding-top:7px; line-height: 1.6em;}
+			.time-value strong{font-size:1.3em;text-align:center;margin-top:12px}
 			progress {
 				width: 90%;
-				height: 1.5em;
+				height: 1.3em;
 				margin-top: 30px;
 				background: green;
 				color: white;
@@ -89,7 +89,7 @@
 			}
 			.stat {
 				text-align: center;
-				font-size: 2.5em;
+				font-size: 2em;
 			}
 
 			progress.show_run {

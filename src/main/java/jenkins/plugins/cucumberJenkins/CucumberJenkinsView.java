@@ -73,6 +73,7 @@ public class CucumberJenkinsView extends ListView {
 	private String totalDisplay;
 	private String systemRegexp;
 	private String debug;
+	public String showAll;
 
 
     @Override
@@ -92,6 +93,8 @@ public class CucumberJenkinsView extends ListView {
 
 		this.totalDisplay = (req.getParameter("totalDisplay") != null) ? req.getParameter("totalDisplay") : "Total";
 		this.totalRegexp = "("+this.firstRegexp+"|"+this.secondRegexp+"|"+this.thirdRegexp+"|"+this.systemRegexp+")";
+
+		this.showAll = (req.getParameter("showAll") != null) ? req.getParameter("showAll"): "";
 
 		this.debug = "";
 
@@ -190,13 +193,14 @@ public class CucumberJenkinsView extends ListView {
 		for(Job job:jobs){
 			if (job.getName().toString().matches(pattern)) {
 				if (job.getLastBuild() != null) {
-					if (job.getLastBuild().isBuilding() || jobIsFailed(job)) {
+					if (job.getLastBuild().isBuilding() || jobIsFailed(job) || this.showAll.equalsIgnoreCase("all")) {
 						String logFile = job.getLastBuild().getLogFile().toString();
 						int nbScenario = Integer.parseInt(getCucumberLogResult(logFile, "all"));
 						int nbScenarioFailed = Integer.parseInt(getCucumberLogResult(logFile, "failed"));
 						String runningMode = " ";
 						String runningProgress = "";
 						String lastAlert = "";
+
 						if (job.getLastBuild().isBuilding()) {
 							int currentDuration = (int)(System.currentTimeMillis() - job.getLastBuild().getTimeInMillis());
 							runningMode = "running";
@@ -208,7 +212,9 @@ public class CucumberJenkinsView extends ListView {
 						}else if (nbScenario == 0 || nbScenario < nbScenarioFailed) {
 							lastAlert = "bigerror";
 						}
-						failedJobs += "<span><span class=\"error "
+
+						failedJobs += "<span><span class=\""
+									+ ((jobIsFailed(job))? "error " : "valid ")
 									+ runningMode
 									+ lastAlert
 									+ "\">"+job.getName().toString()
@@ -216,6 +222,9 @@ public class CucumberJenkinsView extends ListView {
 									+ "</span>"
 									+ runningProgress
 									+ "</span>";
+					}else{
+						this.debug += " - "
+							+ this.showAll;
 					}
 				}
 			}
