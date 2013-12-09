@@ -146,12 +146,7 @@ public class CucumberJenkinsView extends ListView {
 			if (job.getName().toString().matches(pattern)) {
 				if (job.getLastBuild() != null) {
 					logFile = job.getLastBuild().getLogFile().toString();
-					String cucumberResult = getCucumberLogResult(logFile, "all");
-					if (cucumberResult == "relaunch") {
-						// job.build();
-					} else {
-						nbJob += Integer.parseInt(cucumberResult);
-					}
+					nbJob += getCucumberLogResult(logFile, "all");
 				}
 			}
         }
@@ -169,7 +164,7 @@ public class CucumberJenkinsView extends ListView {
 				if (job.getLastBuild() != null) {
 					if (jobIsFailed(job)) {
 						logFile = job.getLastBuild().getLogFile().toString();
-						nbJob += Integer.parseInt(getCucumberLogResult(logFile, "failed"));
+						nbJob += getCucumberLogResult(logFile, "failed");
 					}
 				}
 			}
@@ -195,8 +190,8 @@ public class CucumberJenkinsView extends ListView {
 				if (job.getLastBuild() != null) {
 					if (job.getLastBuild().isBuilding() || jobIsFailed(job) || this.showAll.equalsIgnoreCase("all")) {
 						String logFile = job.getLastBuild().getLogFile().toString();
-						int nbScenario = Integer.parseInt(getCucumberLogResult(logFile, "all"));
-						int nbScenarioFailed = Integer.parseInt(getCucumberLogResult(logFile, "failed"));
+						int nbScenario = getCucumberLogResult(logFile, "all");
+						int nbScenarioFailed = getCucumberLogResult(logFile, "failed");
 						String runningMode = " ";
 						String runningProgress = "";
 						String lastAlert = "";
@@ -280,18 +275,18 @@ public class CucumberJenkinsView extends ListView {
         return rounded.doubleValue();
     }
 
-	private String getCucumberLogResult(String fileName, String which)
+	private int getCucumberLogResult(String fileName, String which)
 	{
 		Pattern pattern;
 		Pattern failed;
-		String result;
+		int result;
 
 		// regexp for cucumber result
 		// 18 scenarios (2 failed, 16 passed)
 		pattern = Pattern.compile("([0-9]+) scenarios? \\((.*)\\)");
 		failed = Pattern.compile("([0-9]+) failed.*");
 		result = parseLog(fileName, which, pattern, failed);
-		if (result != null) {
+		if (result > 0) {
 			return result;
 		}
 
@@ -300,7 +295,7 @@ public class CucumberJenkinsView extends ListView {
 		pattern = Pattern.compile("\\(([0-9]+) tests");
 		failed = Pattern.compile("Failures: ([0-9]+)");
 		result = parseLog(fileName, which, pattern, failed);
-		if (result != null) {
+		if (result > 0) {
 			return result;
 		}
 
@@ -308,15 +303,16 @@ public class CucumberJenkinsView extends ListView {
 		// OK (43 tests, 87 assertions)
 		pattern = Pattern.compile("Tests: ([0-9]+), Assertions: [0-9]+(.*)");
 		result = parseLog(fileName, which, pattern, failed);
-		if (result != null) {
+		if (result > 0) {
 			return result;
 		}
 
 		// no result found, send 0
-		return "0";
+		return 0;
 	}
 
-	private static String parseLog (String fileName, String which, Pattern pattern, Pattern failed) {
+	private static int parseLog (String fileName, String which, Pattern pattern, Pattern failed) {
+		int results = 0;
 		try{
 			// Open the log file
 			FileInputStream fstream = new FileInputStream(fileName);
@@ -331,11 +327,11 @@ public class CucumberJenkinsView extends ListView {
 					if (which == "failed") {
 						Matcher f = failed.matcher(m.group(2));
 						if (f.find()) {
-							return f.group(1);
+							results += Integer.parseInt(f.group(1));
 						}
 					}
 					else if (which == "all") {
-						return m.group(1);
+						results += Integer.parseInt(m.group(1));
 					}
 				}
 			}
@@ -343,8 +339,8 @@ public class CucumberJenkinsView extends ListView {
 			in.close();
 		}catch (Exception e){//Catch exception if any
 			// no log file, return 0
-			return "0";
+			return 0;
 		}
-		return null;
+		return results;
 	}
 }
